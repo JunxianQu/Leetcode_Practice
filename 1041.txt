@@ -1,0 +1,20 @@
+class Solution {
+    public boolean isRobotBounded(String instructions) {
+        if(instructions.length() == 0 || instructions == null) return true;
+        int[] distance = new int[4];
+        int currentDirection = 0;
+        for(int i = 0; i < instructions.length(); i++) {
+            if(instructions.charAt(i) == 'G') {
+                distance[currentDirection]++;
+            } else {
+                if(instructions.charAt(i) == 'L') {
+                    currentDirection = (currentDirection+1)%4;
+                } else {
+                    currentDirection = (currentDirection+3)%4;
+                }
+            }
+        }
+        if( (distance[0] != distance[2] || distance[1] != distance[3]) && currentDirection == 0) return false;
+        return true;
+    }
+}
