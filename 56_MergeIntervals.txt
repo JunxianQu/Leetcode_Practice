@@ -1,0 +1,30 @@
+class Solution {
+    public int[][] merge(int[][] intervals) {
+        PriorityQueue<int[]> que = new PriorityQueue( new Comparator<int[]>(){
+            public int compare(int[] o1, int[] o2){
+                return o1[0] - o2[0];
+            }
+        });
+        for(int i = 0; i < intervals.length; i++) {
+            que.add(new int[]{intervals[i][0], intervals[i][1]});
+        }
+        int count = 0;
+        intervals[0] = que.poll();
+        for(int i = 0; i < intervals.length-1; i++) {
+            int[] temp = new int [2];
+            temp = que.poll();
+            if (temp[0] <= intervals[count][1]) {
+                intervals[count][1] = Math.max(temp[1],intervals[count][1]);
+            } else {
+                count++;
+                intervals[count][0] = temp[0];
+                intervals[count][1] = temp[1];
+            }
+        }
+        int [][] result = new int[count+1][2];
+        for(int i = 0; i < count+1; i++) {
+            result[i] = intervals[i];
+        }
+        return result;
+    }
+}
