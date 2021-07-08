@@ -1,0 +1,61 @@
+class LRUCache {
+    class DNode{
+        DNode prev;
+        DNode next;
+        int val;
+        int k;
+    }
+    
+    int cap;
+    int size = 0;
+    DNode head, tail;
+    Map<Integer,DNode> map;
+    public LRUCache(int capacity) {
+        cap = capacity;
+        head = new DNode();
+        tail = head;
+        map = new HashMap();
+    }
+    
+    public int get(int key) {
+        int result = 0;
+        if (map.containsKey(key)){
+            result = map.get(key).val;
+            if(map.get(key) != tail){
+                DNode temp = map.get(key);
+                temp.prev.next = temp.next;
+                temp.next.prev = temp.prev;
+                temp.prev = tail;
+                temp.next = null;
+                tail.next = temp;
+                tail = temp;
+                map.put(key,tail);
+            }
+        } else {
+            result = -1;
+        }
+        return result;
+    }
+    
+    public void put(int key, int value) {
+        if(map.containsKey(key)){
+            get(key);
+            map.get(key).val = value;         
+            return;
+        }
+        if(size == cap) {
+            
+            map.remove(head.next.k);
+            head = head.next;
+            size--;
+        } 
+        DNode newNode = new DNode();
+        newNode.val = value;
+        newNode.k = key;
+        newNode.prev = tail;
+        tail.next = newNode;
+        tail = newNode;
+        map.put(key,newNode);
+        size++;
+    }
+}
