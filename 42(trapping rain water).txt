@@ -1,0 +1,37 @@
+class Solution {
+    public int trap(int[] height) {
+        if( height.length == 0 || height == null) return 0;
+        int sumAll = 0;
+        int sumMap = 0;
+        int left = 0;
+        int right = 0;
+        int i = 0, j = height.length - 1;
+        int base = 0;
+        while(left >= height[i] && i < j) i++;
+        left = height[i];
+        while(right >= height[j] && j > i) j--;
+        right = height[j];
+        sumMap = height[i]+height[j];
+        sumAll = (j-i+1)*Math.min(left, right);
+        base = Math.min(left, right);
+        while(i < j) {
+            if(left < right){
+                while(i < j && height[i] <= left) {
+                    i++;
+                    sumMap += height[i];
+                }
+                left = height[i];
+            } else {
+                while(i < j && height[j] <= right) {
+                    j--;
+                    sumMap += height[j];
+                }
+                right = height[j];
+            }
+            sumAll += (j-i+1)*(Math.min(left, right) - base);
+            base = Math.min(left, right);
+        }
+        sumMap -= height[j];
+        return (sumAll - sumMap);
+    }
+}
