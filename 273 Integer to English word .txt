@@ -1,0 +1,118 @@
+class Solution {
+    public String numberToWords(int num) {
+        if(num == 0) return "Zero";
+        String nums = Integer.toString(num);
+        int length = nums.length();
+        StringBuffer result = new StringBuffer();
+        if(length>9) {
+            result = billionWords(nums, 0);
+        } else if(length > 6) {
+            result = millionWords(nums, 0, length - 6);
+        } else if(length > 3) {
+            result = thousandWords(nums, 0, length - 3);
+        } else {
+            result = threeDigit(nums, 0, length);
+        }
+        result.deleteCharAt(result.length()-1);
+        return result.toString();
+    }
+    public StringBuffer billionWords(String nums, int index) {
+        StringBuffer res = new StringBuffer();
+        int l = nums.length() - 9;
+        res.append(threeDigit(nums, index, l));
+        res.append("Billion ");
+        index = l;
+        res.append(millionWords(nums, index, 3));
+        return res;
+    }
+    public StringBuffer millionWords(String nums, int index, int l) {
+        StringBuffer res = new StringBuffer();
+        StringBuffer temp = threeDigit(nums, index, l);
+        if(temp.length() != 0) {
+            res.append(temp);
+            res.append("Million ");
+        }
+        index = index + l;
+        res.append(thousandWords(nums, index, 3));
+        return res;
+
+    }    
+    public StringBuffer thousandWords(String nums, int index, int l) {
+        StringBuffer res = new StringBuffer();
+        StringBuffer temp = threeDigit(nums, index, l);
+        if(temp.length() != 0) {
+            res.append(temp);
+            res.append("Thousand ");
+        }
+        index = index + l;
+        res.append(threeDigit(nums, index, 3));
+        return res;
+
+    }    
+    public StringBuffer threeDigit(String nums, int index, int l) {
+        StringBuffer res = new StringBuffer();
+        if(l == 3) {
+            String temp = toWord(nums.charAt(index));
+            if(temp.length() != 0) {
+                res.append(temp);
+                res.append("Hundred ");
+            }
+            l--;
+            index++;
+        }
+        if(l == 2) {
+            if(nums.charAt(index) != '1'){
+                res.append(toWordTen(nums.charAt(index)));
+                index++;
+            } else {
+                res.append(toWordTeen(nums.charAt(index+1)));
+                return res;
+            }
+        }
+        res.append(toWord(nums.charAt(index)));
+        return res;
+    }
+    public String toWord(char c) {
+        switch(c) {
+
+            case '1': return "One ";
+            case '2': return "Two ";
+            case '3': return "Three ";
+            case '4': return "Four ";
+            case '5': return "Five ";
+            case '6': return "Six ";
+            case '7': return "Seven ";
+            case '8': return "Eight ";
+            case '9': return "Nine ";
+        }
+        return "";
+    }
+    public String toWordTen(char c) {
+        switch(c) {
+            case '2': return "Twenty ";
+            case '3': return "Thirty ";
+            case '4': return "Forty ";
+            case '5': return "Fifty ";
+            case '6': return "Sixty ";
+            case '7': return "Seventy ";
+            case '8': return "Eighty ";
+            case '9': return "Ninety ";
+        }
+        return "";
+    }
+    public String toWordTeen(char c) {
+        switch(c) {
+            case '0': return "Ten ";
+            case '1': return "Eleven ";
+            case '2': return "Twelve ";
+            case '3': return "Thirteen ";
+            case '4': return "Fourteen ";
+            case '5': return "Fifteen ";
+            case '6': return "Sixteen ";
+            case '7': return "Seventeen ";
+            case '8': return "Eighteen ";
+            case '9': return "Nineteen ";
+        }
+        return "";
+    }
+}
