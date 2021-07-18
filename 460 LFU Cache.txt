@@ -1,0 +1,64 @@
+class LFUCache {
+    class Node {
+        int key;
+        int val;
+        int ts;
+        int freq;
+        public Node(int key, int val, int ts, int freq) {
+            this.key = key;
+            this.val = val;
+            this.ts = ts;
+            this.freq = freq;
+        }
+    }
+    
+    int clock;
+    int capacity;
+    Map<Integer, Node> map;
+    Queue<Node> queue;
+    
+    public LFUCache(int capacity) {
+        this.clock = 0;
+        this.capacity = capacity;
+        this.map = new HashMap<>();
+        this.queue = new PriorityQueue(new Comparator<Node>(){
+            public int compare(Node o1, Node o2) {
+                if (o1.freq == o2.freq) {
+                return o1.ts - o2.ts;
+            }
+            return o1.freq - o2.freq;
+            }
+        });
+    }
+    
+    public int get(int key) {
+        if (!map.containsKey(key)) {
+            return -1;
+        }
+        Node node = map.get(key);
+        node.freq++;
+        node.ts = clock;
+        clock++;
+        queue.remove(node);
+        queue.offer(node);
+        return node.val;
+    }
+    
+    public void put(int key, int value) {
+        if (get(key) == -1) {
+            Node node = new Node(key, value, clock, 0);
+            if (!map.isEmpty() && map.size() == capacity) {
+                Node toBeRemoved = queue.poll();
+                map.remove(toBeRemoved.key);
+            }
+            if (map.size() < this.capacity) {
+                map.put(key, node);
+                queue.offer(node);
+            }
+        } else {
+            Node node = map.get(key);
+            node.val = value;
+        }
+        clock++;
+    }
+}
