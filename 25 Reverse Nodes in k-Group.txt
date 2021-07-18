@@ -1,0 +1,30 @@
+class Solution {
+    public ListNode reverseKGroup(ListNode head, int k) {
+        if(k == 1) return head;
+        int length = 0;
+        ListNode point = head;
+        ListNode temp = new ListNode();
+        ListNode result = new ListNode();
+        while(point != null) {
+            length++;
+            point = point.next;
+        }
+        Stack<ListNode> stk = new Stack();
+        point = head;
+        int l = length;
+        while(l >= k) {
+            for(int i = 0; i < k; i++) {
+                stk.push(point);
+                point = point.next;
+            }
+            if(l == length) result = temp;
+            while(!stk.isEmpty()) {
+                temp.next = stk.pop();
+                temp = temp.next;
+            }
+            l -= k;
+        }
+        temp.next = point;
+        return result.next;
+    }
+}
