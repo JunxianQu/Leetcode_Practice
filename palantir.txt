@@ -1,0 +1,43 @@
+
+                        } else if((c.charAt(m) == 'o' || c.charAt(m) == '0') && (n.charAt(m) == 'o' || n.charAt(m) == '0')) {
+                            continue;
+                        } else if((c.charAt(m) == 'a' || c.charAt(m) == '@') && (n.charAt(m) == 'a' || n.charAt(m) == '@')) {
+                            continue;
+                        } else if((c.charAt(m) == 'e' || c.charAt(m) == '3') && (n.charAt(m) == 'e' || n.charAt(m) == '3')) {
+                            continue;
+                        } else if(c.charAt(m) == n.charAt(m+1) && c.charAt(m+1) == n.charAt(m)) {
+                                m++;
+                                continue;
+                        } else{
+                            break;
+                        }
+                    }
+                }
+                if(m > ck && m > nk) {
+                    result.add(n);
+                    break;
+                }
+            }
+        }
+    }
+    /*public static void task1(List<String> companyDomains, List<String> newDomains, List<String> result) {
+        int k = 0;
+        int l = 0;
+        String s = "";
+        Map<String, String> map = new HashMap();
+        for(int i = 0; i < companyDomains.size(); i++) {
+            s = companyDomains.get(i);
+            l = s.length();
+            k = s.indexOf('.');
+            map.put(s.substring(0, k), s.substring(k+1, l));
+        }
+        for(int i = 0; i < newDomains.size(); i++) {
+            s = newDomains.get(i);
+            l = s.length();
+            k = s.indexOf('.');
+            if(map.containsKey(s.substring(0, k)) && !map.get(s.substring(0, k)).equals(s.substring(k+1, l))) {
+                result.add(s);
+            }
+        }
+    }*/
+}
