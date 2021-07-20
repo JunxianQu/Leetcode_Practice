@@ -1,0 +1,29 @@
+class Solution {
+    int[] initArr;
+    int[] shufArr;
+    public Solution(int[] nums) {
+        initArr = nums;
+        shufArr = new int[nums.length];
+    }
+    
+    /** Resets the array to its original configuration and return it. */
+    public int[] reset() {
+        return initArr;
+    }
+    
+    /** Returns a random shuffling of the array. */
+    public int[] shuffle() {
+        PriorityQueue<int[]> pque = new PriorityQueue(new Comparator<int[]>(){
+            public int compare(int[] o1, int[] o2) {
+                return o1[1] - o2[1];
+            }});
+        for(int i = 0; i < initArr.length; i++) {
+            pque.add(new int[]{initArr[i], (int)(Math.random()*1000)});
+        }
+        for(int i = 0; i < initArr.length; i++) {
+            shufArr[i] = pque.poll()[0];
+        }
+        return shufArr;
+        
+    }
+}
