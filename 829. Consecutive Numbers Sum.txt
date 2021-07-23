@@ -1,0 +1,16 @@
+class Solution {
+    public int consecutiveNumbersSum(int n) {
+        int k = n;
+        int result = 0;
+        int accumulate = 0;
+        while(k%2 == 0) {
+            k = k/2;
+        }
+        for(int i = 1; i <= (int)(Math.sqrt(2)*Math.sqrt(k+0.25)-0.5); i++ ) {
+            if(k%i == 0 || (i%2 == 0 && k%i == i/2)) {
+                result++;
+            }
+        }
+        return result;
+    }
+}

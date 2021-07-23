@@ -1,0 +1,16 @@
+class Solution {
+    public int partitionDisjoint(int[] nums) {
+        int[] maxZero2I = new int[nums.length];
+        int[] minTail2I = new int[nums.length];
+        maxZero2I[0] = nums[0];
+        minTail2I[nums.length-1] = nums[nums.length-1];
+        for(int i = 1; i < nums.length; i++) {
+            maxZero2I[i] = Math.max(maxZero2I[i-1], nums[i]);
+            minTail2I[nums.length-i-1] = Math.min(minTail2I[nums.length-i], nums[nums.length-i-1]);
+        }
+        for(int i = 0; i < nums.length; i++) {
+            if(maxZero2I[i]<=minTail2I[i+1]) return i+1;
+        }
+        return -1;
+    }
+}
