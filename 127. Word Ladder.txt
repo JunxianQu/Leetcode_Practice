@@ -1,0 +1,48 @@
+class Solution {
+    HashMap<String, Integer> map = new HashMap();
+    public int ladderLength(String beginWord, String endWord, List<String> wordList) {
+        HashSet<String> set = new HashSet(wordList);
+        if(set.contains(beginWord)) set.remove(beginWord);
+        map.put(beginWord, 1);
+        bestPosition(beginWord, endWord, set);
+        return map.getOrDefault(endWord,0);
+        
+    }
+    public void bestPosition(String word, String endWord, HashSet<String> set) {
+        Queue<String> que = new LinkedList();
+        que.offer(word);
+        while(!que.isEmpty()) {
+            int size = que.size();
+            while(size > 0) {
+                String s = que.poll();
+                List<String> neighbors = findNeighbors(s, set);
+                for(String q : neighbors) {
+                    set.remove(q);
+                    que.offer(q);
+                    if(q.equals(endWord)) return;
+                }
+                size--;
+            }
+        }
+
+    }
+    public List<String> findNeighbors(String word, HashSet<String> set) {
+        char[] c = word.toCharArray();
+        List<String> list = new ArrayList();
+        for(int j = 0; j < word.length(); j++) {
+            char temp = c[j];
+            for(int i = 'a'; i <= 'z'; i++) {
+                if((char)i == temp) continue;
+                c[j] = (char)i;
+                String s = String.valueOf(c);
+                // if(map.containsKey(s) && map.get(s) <= map.get(word)+1) continue;
+                if(set.contains(s) ) {
+                    map.put(s, map.get(word)+1);
+                    list.add(s);
+                }
+            }
+            c[j] = temp;
+        }
+        return list;
+    }
+}
