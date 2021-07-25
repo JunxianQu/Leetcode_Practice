@@ -1,0 +1,81 @@
+class Solution {
+    HashMap<String,List<String>> map = new HashMap();
+    List<List<String>> result = new ArrayList();
+    
+    List<String> currentPath = new ArrayList();
+    // HashSet<String> distinct = new HashSet();
+    public List<List<String>> findLadders(String beginWord, String endWord, List<String> wordList) {
+        HashSet<String> set = new HashSet(wordList);
+        findLaddersHelper(beginWord, endWord, set);
+        findPath(beginWord, endWord);
+        if(result.size()==0) return result;
+        int shortest = result.get(result.size()-1).size();
+        for(int i = result.size()-1; i >= 0; i--) {
+            if(result.get(i).size() > shortest) result.remove(i);
+        }
+        return result;
+        
+    }
+    public List<String> findNeighbor(String s, Set<String> set) {
+        List<String> sNeighbor = new ArrayList();
+        for(int j = 0; j < s.length(); j++) {
+            char[] c = s.toCharArray();
+            char temp = c[j];
+            for(int m = 'a'; m <= 'z'; m++) {
+                c[j] = (char)m;
+                if(set.contains(String.valueOf(c))) {
+                    sNeighbor.add(String.valueOf(c));
+                }
+            
+            }
+            c[j] = temp;    
+        }
+        return sNeighbor;
+    }
+    public void findLaddersHelper(String beginWord, String endWord, HashSet<String> set) {
+        
+        currentPath.add(beginWord);
+        Queue<String> que = new LinkedList();
+        que.offer(beginWord);
+        int size = que.size();
+        if(set.contains(beginWord)) set.remove(beginWord);
+        while(!que.isEmpty()) {
+            HashSet<String> trash = new HashSet();
+            while(size > 0) {
+                String temp = que.poll();
+                
+                List<String> qNeighbor = findNeighbor(temp, set);
+                if(!map.containsKey(temp)) {
+                    map.put(temp, new ArrayList<String>());
+                } 
+                for(String q : qNeighbor) {
+                    
+                    map.get(temp).add(q);
+                    if(!trash.contains(q))que.offer(q); 
+                    trash.add(q);
+                    
+                }
+                size--;
+            }
+            for(String t : trash) {
+                if(set.contains(t)) set.remove(t);
+            }
+            size = que.size();
+        }
+    }
+    public void findPath(String beginWord, String endWord) {
+        if(beginWord.equals(endWord)) {
+            result.add(new ArrayList<String>(currentPath));
+        }
+        if(!result.isEmpty() && result.get(result.size()-1).size() <= currentPath.size());
+        
+        List<String> connect = map.get(beginWord);
+        for(String s : connect) {
+            currentPath.add(s);
+            findPath(s, endWord);
+            currentPath.remove(currentPath.size()-1);
+        }
+        
+    }
+        
+}
