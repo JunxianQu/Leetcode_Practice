@@ -1,0 +1,12 @@
+class Solution {
+    public boolean isSubtree(TreeNode root, TreeNode subRoot) {
+        String sbroot = preorderSearch(root);
+        String sbsubroot = preorderSearch(subRoot);
+        return sbroot.indexOf(sbsubroot) == -1? false:true;
+    }
+    public String preorderSearch(TreeNode root) {
+        if(root == null) return "null";
+        String sb = "|" + root.val + "|" + preorderSearch(root.left) + "|" + preorderSearch(root.right) ;
+        return sb;
+    }
+}
