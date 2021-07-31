@@ -1,0 +1,58 @@
+class Solution {
+    public int minReorder(int n, int[][] connections) {
+        HashMap<Integer,List<Integer>> map = new HashMap();
+        HashMap<Integer, List<Integer>> mapReverse = new HashMap();
+        int result = 0;
+        for(int i = 0; i < n-1; i++) {
+            List<Integer> temp = new ArrayList();
+            if(!map.containsKey(connections[i][1])){
+                temp.add(connections[i][0]);
+                map.put(connections[i][1], temp);
+                
+            } else {
+                temp = map.get(connections[i][1]);
+                temp.add(connections[i][0]);
+            }
+            List<Integer> tempReverse = new ArrayList();
+            if(!mapReverse.containsKey(connections[i][0])) {
+                tempReverse.add(connections[i][1]);
+                mapReverse.put(connections[i][0], tempReverse);
+            } else {
+                tempReverse = mapReverse.get(connections[i][0]);
+                tempReverse.add(connections[i][1]);
+            }
+        }
+        Queue<Integer> que = new LinkedList();
+        int[] flagReverse = new int[n];
+        if(map.containsKey(0)) {
+            for(int i = 0; i < map.get(0).size(); i++) {
+                que.offer(map.get(0).get(i));
+            }
+        }
+        if(mapReverse.containsKey(0)) {
+            for(int i = 0; i < mapReverse.get(0).size(); i++) {
+                que.offer(mapReverse.get(0).get(i));
+                result++;
+            }
+        }
+        flagReverse[0] = 1;
+        for(int m = 0; m < n-1; m++) {
+            int city = que.poll();
+            flagReverse[city] = 1;
+            if(map.containsKey(city)) {
+                for(int i = 0; i < map.get(city).size(); i++) {
+                    if(flagReverse[map.get(city).get(i)] == 1) continue;
+                    que.offer(map.get(city).get(i));
+                }
+            }
+            if(mapReverse.containsKey(city)) {
+                for(int i = 0; i < mapReverse.get(city).size(); i++) {
+                    if(flagReverse[mapReverse.get(city).get(i)] == 1) continue;
+                    que.offer(mapReverse.get(city).get(i));
+                    result++;
+                }
+            }
+        }
+        return result;
+    }
+}
