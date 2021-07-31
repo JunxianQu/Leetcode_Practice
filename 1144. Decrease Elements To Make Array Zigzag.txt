@@ -1,0 +1,35 @@
+class Solution {
+    public int movesToMakeZigzag(int[] nums) {
+        int tallhead = 0;
+        int shorthead = 0;
+        int[] temp = new int[nums.length];
+        for(int i = 0; i < nums.length; i++) {
+            temp[i] = nums[i];
+        }
+        for(int i = 0; i < nums.length-1; i++) {
+            if(i%2 == 0) {
+                if(temp[i] <= temp[i+1]) {
+                    tallhead += temp[i+1] - temp[i] + 1;
+                    temp[i+1] = temp[i] - 1; 
+                }
+            } else {
+                if(temp[i] >= temp[i+1]) {
+                    tallhead += temp[i] - temp[i+1] + 1;
+                }
+            }
+        }
+        for(int i = 0; i < nums.length-1; i++) {
+            if(i%2 == 0) {
+                if(nums[i] >= nums[i+1]) {
+                    shorthead += nums[i] - nums[i+1] + 1;
+                }
+            } else {
+                if(nums[i] <= nums[i+1]) {
+                    shorthead += nums[i+1] - nums[i] + 1;
+                    nums[i+1] = nums[i] - 1;
+                }
+            }
+        }        
+        return Math.min(tallhead, shorthead);
+    }
+}
