@@ -1,0 +1,52 @@
+class Solution {
+    public List<String> fullJustify(String[] words, int maxWidth) {
+        List<String> result = new ArrayList();
+        for(int i = 0; i < words.length; ) {
+            int space = maxWidth - words[i].length();
+            Queue<String> cache = new LinkedList();
+            cache.offer(words[i]);
+            i++;
+            while(i < words.length && words[i].length() + 1 <= space) {
+                cache.offer(words[i]);
+                space = space - 1 - words[i].length();
+                i++;
+            }
+            if(i == words.length) {
+                result.add(getString(cache, space, true));
+            } else {
+                result.add(getString(cache, space, false));
+            }
+        }
+        return result;
+    }
+    public String getString(Queue<String> cache, int space, boolean last) {
+        int n = cache.size()-1;
+        String s = cache.poll();
+        if(n == 0) {
+            for(int i = 0; i < space; i++) {
+                s += " ";
+            }
+            return s;
+        }
+        if(last) {
+            while(!cache.isEmpty()) {
+                s += " " + cache.poll();
+            }
+            for(int i = 0; i < space; i++) {
+                s += " ";
+            }
+            return s;
+        }
+        int[] flag = new int[n];
+        for(int i = 0; i < space % n; i++) {
+            flag[i] = 1;
+        }
+        for(int j = 0; j < n; j++) {       
+            for(int i = 0; i < space / n + flag[j]+1; i++) {
+                s += " ";
+            }
+            s += cache.poll();
+        }
+        return s;
+    }
+}
