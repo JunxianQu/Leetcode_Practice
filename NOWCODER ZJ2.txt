@@ -1,0 +1,43 @@
+import java.util.*;
+public class Main{
+    public static void main(String[] args) {
+        Scanner in = new Scanner(System.in);
+        int t = in.nextInt();
+        long[] n = new long[t];
+        long[] k = new long[t];
+        long[] d1 = new long[t];
+        long[] d2 = new long[t];
+        String[] s = new String[t];
+        for(int i = 0; i < t; i++) {
+            n[i] = in.nextLong();
+            k[i] = in.nextLong();
+            d1[i] = in.nextLong();
+            d2[i] = in.nextLong();
+            s[i] = evenNot(n[i], k[i], d1[i], d2[i]);
+        }
+        for(String str : s) {
+            System.out.println(str);
+        }
+    }
+    public static String evenNot(long n, long k, long d1, long d2) {
+        long[] score = new long[4];
+        long[] dif = new long[4];
+        if(k != 0 &&(d1>=k || d2>=k)) return "no";
+        dif[0] = d1 + 2*d2;
+        dif[1] = 2*d1 + d2;
+        dif[2] = Math.max(d1, d2) + Math.abs(d1-d2);
+        dif[3] = d1+d2;
+        score[0] = 2*d1+d2;
+        score[1] = d1 + d2*2;
+        score[2] = d1+d2;
+        score[3] = Math.max(d1, d2) + Math.abs(d1-d2);
+        for(int i = 0; i < 4; i++) {
+            if((k - dif[i])%3 != 0)continue;
+            if(n-k < score[i] ) continue;
+            if(score[i] == 0 && (n-k)%3 == 0) return "yes";
+            if(score[i] == 0) continue;
+            if(((n-k)-score[i])%3 == 0) return "yes";
+        }
+        return "no";
+    }
+}
