@@ -1,0 +1,18 @@
+import java.util.Scanner;
+public class Main{
+    public static void main(String[] args) {
+        Scanner in = new Scanner(System.in);
+        int num = in.nextInt();
+        int[] nums = new int[num+1];
+        for(int i = 1; i <= num; i++) {
+            nums[i] = in.nextInt();
+        }
+        int[] dp = new int[num+1];
+        dp[1] = 2;
+        for(int i = 2; i <= num; i++) {
+            dp[i] = ((dp[i-1]-dp[nums[i]-1]) + 2 + dp[i-1])%1000000007;
+            if(dp[i] < 0) dp[i] += 1000000007;
+        }
+        System.out.println(dp[num]);
+    }
+}
