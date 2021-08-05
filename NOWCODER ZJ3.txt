@@ -1,0 +1,37 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+public class Main {
+ 
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int len = sc.nextInt();
+        int oper = sc.nextInt();
+        String str = sc.next();
+        System.out.println(Math.max(arraySolve(len, oper, str, 'a'), arraySolve(len, oper, str, 'b')));
+ 
+    }
+ 
+    public static int arraySolve(int n, int m, String s, char c) {
+        int res = 0;
+        List<Integer> indexes = new ArrayList<>();  // 用来存储a/b的所有下标位置
+        for (int i = 0; i < n; i++) {
+            if (s.charAt(i) == c) {  //用c来替换其他字符，将c所在下标位置加入
+                indexes.add(i);
+            }
+        }
+ 
+        // 如果要替换的字符个数小于可替换个数，那么直接全部替换即可
+        if (indexes.size() <= m) {
+            return n;
+        }
+ 
+        // 注意端点位置的处理
+        indexes.add(s.length());
+        res = indexes.get(m);
+        for (int i = m + 1; i < indexes.size(); i++) {
+ 
+            res = Math.max(res, indexes.get(i) - indexes.get(i - m - 1) - 1);
+        }
+        return res;
+    }
