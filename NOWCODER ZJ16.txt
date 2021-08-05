@@ -1,0 +1,16 @@
+import java.util.*;
+public class Main{
+    public static void main(String[] args) {
+        Scanner in = new Scanner(System.in);
+        while(in.hasNext()) {
+            double n = in.nextDouble(), m = in.nextInt();
+            double result = 0;
+            while(m > 0) {
+                result += n;
+                m--;
+                n = Math.sqrt(n);
+            }
+            System.out.printf("%.2f\n", result);
+        }
+    }
+}
