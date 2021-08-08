@@ -1,0 +1,13 @@
+class Solution {
+    public void rotate(int[][] matrix) {
+        for(int layer = 0; layer < matrix.length/2; layer++) {
+            for(int i = layer; i < matrix.length-1-layer; i++) {
+                int temp = matrix[layer][i];
+                matrix[layer][i] = matrix[matrix.length-1-i][layer];
+                matrix[matrix.length-1-i][layer] = matrix[matrix.length-1-layer][matrix.length-1-i];
+                matrix[matrix.length-1-layer][matrix.length-1-i] = matrix[i][matrix.length-1-layer];
+                matrix[i][matrix.length-1-layer] = temp;
+            }
+        }
+    }
+}
