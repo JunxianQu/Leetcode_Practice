@@ -1,0 +1,48 @@
+class Solution {
+    class Window{
+        int val;
+        char ch;
+    }
+    public String minWindow(String s, String t) {
+        if(s.length() == 0 || s.length() < t.length()) return "";
+        HashMap<Character, Integer> map = new HashMap();
+        Queue<Window> que = new LinkedList();
+        for(int i = 0; i < t.length(); i++) {
+            if(map.containsKey(t.charAt(i))) {
+                int num = map.get(t.charAt(i));
+                map.put(t.charAt(i), num+1);
+            } else {
+                map.put(t.charAt(i), 1);
+            }
+        }
+        int[] flag = new int[256];
+        String res = "";
+        for(int i = 0; i < s.length(); i++) {
+            Window w = new Window();
+            w.ch = s.charAt(i);
+            w.val = i;
+            if(map.containsKey(s.charAt(i))) {
+                flag[s.charAt(i)]++;
+                que.offer(w);
+                int count = 0; 
+                while(!que.isEmpty() && flag[que.peek().ch] > map.get(que.peek().ch)) {
+                    flag[que.peek().ch]--;
+                    que.poll();
+                }
+                for(int k = 0; k < 256; k++) {
+                    if(flag[k]!=0 && flag[k] >= map.get((char)k)) count++;
+                }
+                if(count == map.size()) {
+                    if(res.equals("")) {
+                        res = s.substring(que.peek().val,i+1);
+                        continue;
+                    }
+                    res = res.length() <= i-que.peek().val +1 ? res : s.substring(que.peek().val,i+1);
+                }
+            }
+            
+            
+        }
+        return res;
+    }
+}
