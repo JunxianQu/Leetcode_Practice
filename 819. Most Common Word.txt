@@ -1,0 +1,47 @@
+class Solution {
+    class Frequency{
+        String s;
+        int n;
+    }
+    public String mostCommonWord(String paragraph, String[] banned) {
+        paragraph = paragraph.toLowerCase();
+        ArrayList<String> str = new ArrayList();
+        String ss = "";
+        for(int i = 0; i < paragraph.length(); i++) {
+            if(paragraph.charAt(i)-'a' >= 0 && paragraph.charAt(i)-'a' <= 25) {
+                ss += paragraph.charAt(i);
+            } else {
+                if(ss.length() != 0) str.add(ss);
+                ss = "";
+            }
+        }
+        if(ss.length() != 0) str.add(ss);
+        HashMap<String, Frequency> map = new HashMap();
+        PriorityQueue<Frequency> pq = new PriorityQueue<Frequency>(new Comparator<Frequency>(){
+            public int compare(Frequency o1, Frequency o2) {
+                return o2.n - o1.n;
+            }
+        });
+        for(String st : str) {
+            Frequency temp = new Frequency();
+            if(map.containsKey(st)) {
+                temp = map.get(st);
+                pq.remove(temp);
+                temp.n = temp.n+1;
+                pq.add(temp);
+            } else {
+                temp.s = st;
+                temp.n = 1;
+                map.put(st, temp);
+                pq.add(temp);
+            }
+        }
+        for(String ban : banned) {
+            if(map.containsKey(ban)) {
+                Frequency temp = map.get(ban);
+                pq.remove(temp);
+            }
+        }
+        return pq.poll().s;
+    }
+}
