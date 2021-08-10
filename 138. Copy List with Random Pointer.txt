@@ -15,8 +15,7 @@ class Node {
 
 class Solution {
     public Node copyRandomList(Node head) {
-        HashMap<Node, Integer> map = new HashMap();
-        HashMap<Integer, Node> resMap = new HashMap();
+        HashMap<Node, Node> map = new HashMap();
         Node pointer = head;
         Node resHead = new Node(0);
         Node resPointer = resHead;
@@ -24,8 +23,7 @@ class Solution {
         while(pointer != null) {
             resPointer.next = new Node(pointer.val);
             resPointer = resPointer.next;
-            map.put(pointer, i);
-            resMap.put(i, resPointer);
+            map.put(pointer, resPointer);
             pointer = pointer.next;
             i++;
         }
@@ -33,8 +31,7 @@ class Solution {
         resPointer = resHead.next;
         while(pointer != null) {
             if(map.containsKey(pointer.random)) {
-                int t = map.get(pointer.random);
-                resPointer.random = resMap.get(t);
+                resPointer.random = map.get(pointer.random);
             }
             pointer = pointer.next;
             resPointer = resPointer.next;
