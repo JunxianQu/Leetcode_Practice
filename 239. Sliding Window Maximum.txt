@@ -1,0 +1,36 @@
+class Solution {
+    class Node{
+        int val;
+        int index;
+    }
+    public int[] maxSlidingWindow(int[] nums, int k) {
+        // HashMap<Integer, Node> map = new HashMap();
+        PriorityQueue<Node> pq = new PriorityQueue<Node>(new Comparator<Node>(){
+            public int compare(Node o1, Node o2) {
+                return -o1.val + o2.val;
+            }
+        });
+
+    int[] res = new int[nums.length - k + 1];
+    for(int i = 0; i < k; i++) {
+        Node temp = new Node();
+        temp.val = nums[i];
+        temp.index = i;
+        // map.put(i, temp);
+        pq.add(temp);
+    }
+    res[0] = pq.peek().val;
+    for(int i = k; i < nums.length; i++) {
+        Node temp = new Node();
+        temp.val = nums[i];
+        temp.index = i;
+        // Node delete = map.get(i-k);
+        // pq.remove(delete);
+        // map.put(i, temp);
+        pq.add(temp);
+        while(pq.peek().index <= i - k) pq.poll();
+        res[i-k+1] = pq.peek().val;
+    }
+    return res;    
+    }
+}
