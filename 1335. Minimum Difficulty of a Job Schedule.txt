@@ -1,0 +1,25 @@
+class Solution {
+    public int minDifficulty(int[] jobDifficulty, int d) {
+        int l = jobDifficulty.length;
+        if(l < d) return -1;
+        int[][] dp = new int[d+1][l];
+        for(int[] p : dp) Arrays.fill(p, -1);
+        int res = dfs(jobDifficulty, d, dp, 0);
+        return res;
+    }
+    public int dfs(int[] jobDifficulty, int d, int[][] dp, int idx) {
+       int max = 0; 
+        if(d == 1) {  
+            while(idx < jobDifficulty.length) max = Math.max(max, jobDifficulty[idx++]);
+            return max;
+        }
+        if(dp[d][idx] != -1) return dp[d][idx];
+        int res = Integer.MAX_VALUE;
+        for(int i = idx; i < jobDifficulty.length - d + 1; i++) {
+            max = Math.max(max, jobDifficulty[i]);
+            res = Math.min(res, max + dfs(jobDifficulty, d-1, dp, i+1));
+        }
+        return dp[d][idx] = res;
+        
+    }
+}
