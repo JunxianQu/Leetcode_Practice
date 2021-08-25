@@ -1,0 +1,21 @@
+boolean incorrectPasscodeAttempts(String passcode, String[] attempts) {
+    HashMap<String, ArrayList<Integer>> map = new HashMap();
+    for(int i = 0; i < attempts.length; i++) {
+        String str = attempts[i];
+        if(map.containsKey(str)) {
+            ArrayList<Integer> arr = map.get(str);
+            arr.add(i);
+        } else {
+            ArrayList<Integer> arr = new ArrayList();
+            arr.add(i);
+            map.put(str, arr);
+        }        
+    }
+    if(!map.containsKey(passcode)  && attempts.length >= 10) return true;
+    if(!map.containsKey(passcode)) return false;
+    ArrayList<Integer> arr = map.get(passcode);
+    for(int i = 0; i < arr.size(); i++) {
+        if(i < arr.size()-1 && arr.get(i+1) - arr.get(i) >= 10 || i == arr.size()-1 && arr.get(i) < attempts.length - 10 || i == 0 && arr.get(i) >= 10) return true;
+    }
+    return false;
+}
