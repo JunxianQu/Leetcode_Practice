@@ -1,0 +1,43 @@
+class Solution {
+    public boolean canFinish(int numCourses, int[][] prerequisites) {
+        HashMap<Integer, List<Integer>> map = new HashMap();
+        for(int[] pre : prerequisites) {
+            if(map.containsKey(pre[1])) {
+                List<Integer> temp = map.get(pre[1]);
+                temp.add(pre[0]);
+            } else {
+                List<Integer> temp = new ArrayList();
+                temp.add(pre[0]);
+                map.put(pre[1], temp);
+            }
+        }
+        int[] flag = new int[numCourses];
+        int count = 0;
+        for(int i = 0; i < numCourses; i++) {
+            if(!map.containsKey(i)) {
+                flag[i] = 1;
+                map.remove(i);
+                count++;
+            }
+        }
+        int lastCount = count;
+        while(count != numCourses) {
+            for(int i = 0; i < numCourses; i++) {
+                if(flag[i] == 1) continue;
+                List<Integer> temp = map.get(i);
+                int j = 0;
+                for(; j < temp.size(); j++) {
+                    if(map.containsKey(temp.get(j))) break;
+                }
+                if(temp.size() == j) {
+                    flag[i] = 1;
+                    map.remove(i);
+                    count++;
+                }
+            }
+            if(count == lastCount) return false;
+            lastCount = count;
+        }
+        return true;
+    }
+}
