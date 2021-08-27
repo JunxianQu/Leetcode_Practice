@@ -1,0 +1,65 @@
+class Solution {
+    HashMap<String, List<String>> neighbor = new HashMap();
+    public List<List<String>> findLadders(String beginWord, String endWord, List<String> wordList) {
+        // if(beginWord.equals(endWord)) return 1;
+        HashSet<String> set = new HashSet(wordList);
+        if(!set.contains(endWord)) return new ArrayList<List<String>>();
+        set.remove(beginWord);
+        findNeighbor(neighbor, set, beginWord);
+        Queue<String> que = new LinkedList();
+        Queue<List<String>> qul = new LinkedList();
+        List<String> qulist = new ArrayList();
+        qulist.add(beginWord);
+        qul.offer(qulist);
+        que.offer(beginWord);
+        List<List<String>> res = new ArrayList();
+        while(!que.isEmpty()) {
+            int size = que.size();
+            for(int i = 0; i < size; i++) {
+                String s = que.poll();
+                List<String> sList = qul.poll(); 
+                if(s.equals(endWord)) {
+                    res.add(sList);
+                    continue; 
+                }
+                set.remove(s);
+                List<String> ls = neighbor.get(s);
+                for(String st : ls) {
+                    que.offer(st);
+                    sList.add(st);
+                    qul.offer(new ArrayList<String>(sList));
+                    sList.remove(sList.size()-1);
+                    findNeighbor(neighbor, set, st);
+                }
+            }
+        }
+        int min = Integer.MAX_VALUE;
+        for(int i = 0; i < res.size(); i++) {
+            min = Math.min(min, res.get(i).size());
+        }
+        for(int i = 0; i < res.size(); i++) {
+            if(res.get(i).size() > min) {
+                res.remove(i);
+                i--;
+            }
+        }
+        return res;
+    }
+    public void findNeighbor(HashMap<String, List<String>> neighbor, HashSet<String> set, String s) {
+        neighbor.put(s, new ArrayList<String>());
+        char[] c = s.toCharArray();
+        for(int j = 0; j < c.length; j++) {
+            char temp = c[j];
+            for(int i = 'a'; i <= 'z'; i++) { 
+                if(i == temp) continue;
+                c[j] = (char)i;
+                String ooo = String.valueOf(c);
+                if(set.contains(ooo)) {
+                    List<String> ls = neighbor.get(s);
+                    ls.add(ooo);
+                } 
+            }
+            c[j] = temp;
+        }
+    }
+}
