@@ -1,0 +1,93 @@
+class Solution {
+    class Point{
+        int val;
+        int i = 0;
+        int j = 0;
+    }
+    public int cutOffTree(List<List<Integer>> forest) {
+        PriorityQueue<Point> pq = new PriorityQueue<Point>(new Comparator<Point>(){
+            public int compare(Point o1, Point o2) {
+                return o1.val-o2.val;
+            }
+        });
+        int[][] tree = new int[forest.size()][forest.get(0).size()];
+        for(int i = 0; i < forest.size(); i++) {
+            List<Integer> fore = forest.get(i);
+            for(int j = 0; j < fore.size(); j++) {
+                tree[i][j] = fore.get(j);
+                if(fore.get(j) > 1) {
+                    Point p = new Point();
+                    p.val = fore.get(j);
+                    p.i = i;
+                    p.j = j;
+                    pq.add(p);
+                }
+            }
+        }
+        Point start = new Point();
+        start.val = tree[0][0];
+        int res = 0;
+        while(!pq.isEmpty()) {
+            Point end = pq.poll();
+            int[][] flag = new int[tree.length][tree[0].length];
+            int length = searchPath(tree, flag, start, end);
+            if(length >= 1000) return -1;
+            res += length;
+            start = end;
+        }
+        return res;
+        
+    }
+    public int searchPath(int[][] tree, int[][] flag, Point start, Point end) {
+        if(start.val == end.val) return 0;
+        flag[start.i][start.j] = 1;
+        Queue<Point> que = new LinkedList();
+        que.offer(start);
+        int res = 0;
+        while(!que.isEmpty()) {
+            int size = que.size();
+            // int sum = 0;
+            for(int m = 0; m < size; m++) {
+                Point p = que.poll();
+                if(tree[p.i][p.j] == 0) continue;
+                if(p.val == end.val) return res;
+                if(p.i > 0 && tree[p.i-1][p.j] >= 1 && flag[p.i-1][p.j] == 0) {
+                   Point temp = new Point();
+                    temp.val = tree[p.i-1][p.j];
+                    flag[p.i-1][p.j] = 1;
+                    temp.i = p.i-1;
+                    temp.j = p.j;
+                    que.offer(temp);
+                }
+                if(p.j > 0 && tree[p.i][p.j-1] >= 1 && flag[p.i][p.j-1] == 0) {
+                   Point temp = new Point();
+                    temp.val = tree[p.i][p.j-1];
+                    flag[p.i][p.j-1] = 1;
+                    temp.i = p.i;
+                    temp.j = p.j-1;
+                    que.offer(temp);
+                }
+                if(p.i < tree.length-1 && tree[p.i+1][p.j] >= 1 && flag[p.i+1][p.j] == 0) {
+                   Point temp = new Point();
+                    temp.val = tree[p.i+1][p.j];
+                    flag[p.i+1][p.j] = 1;
+                    temp.i = p.i+1;
+                    temp.j = p.j;
+                    que.offer(temp);
+                }
+                if(p.j < tree[0].length-1 && tree[p.i][p.j+1] >= 1 && flag[p.i][p.j+1] == 0) {
+                   Point temp = new Point();
+                    temp.val = tree[p.i][p.j+1];
+                    flag[p.i][p.j+1] = 1;
+                    temp.i = p.i;
+                    temp.j = p.j+1;
+                    que.offer(temp);
+                }
+                // sum++;
+            }
+            res += 1;
+        }
+        
+        return 1000;
+    }
+}
