@@ -1,0 +1,29 @@
+class Solution {
+    public List<String> letterCombinations(String digits) {
+        if(digits.length() == 0 || digits == null) return new ArrayList<String>();
+        HashMap<Character, String> map = new HashMap();
+        map.put('2',"abc");
+        map.put('3',"def");
+        map.put('4',"ghi");
+        map.put('5',"jkl");
+        map.put('6',"mno");
+        map.put('7',"pqrs");
+        map.put('8',"tuv");
+        map.put('9',"wxyz");
+        List<String> res = new ArrayList();
+        combineHelper(res, map, digits, "");
+        return res;
+    }
+    public void combineHelper(List<String> res, HashMap<Character, String> map, String digits, String ans) {
+        if(digits.length() == 0) {
+            res.add(new String(ans));
+            return;
+        }
+        char[] com = map.get(digits.charAt(0)).toCharArray();
+        for(char c : com){
+            ans = ans + String.valueOf(c);
+            combineHelper(res, map, digits.substring(1,digits.length()), ans);
+            ans = ans.substring(0, ans.length()-1);
+        }
+    }
+}
