@@ -1,0 +1,27 @@
+class Solution {
+    public int[][] floodFill(int[][] image, int sr, int sc, int newColor) {
+        int oldColor = image[sr][sc];
+        int[][] flag = new int[image.length][image[0].length];
+        floodHelper(flag, image, sr, sc, newColor, oldColor);
+        return image;
+    }
+    public void floodHelper(int[][] flag, int[][] image, int i, int j, int newColor, int oldColor) {
+        if(image[i][j] != oldColor || flag[i][j] == 1) {
+            return;
+        }
+        image[i][j] = newColor;
+        flag[i][j] =1;
+        if(i > 0) {
+            floodHelper(flag, image, i-1, j, newColor, oldColor);
+        }
+        if(j > 0) {
+            floodHelper(flag, image, i, j-1, newColor, oldColor);
+        }
+        if(i < image.length-1) {
+            floodHelper(flag, image, i+1, j, newColor, oldColor);
+        }
+        if(j < image[0].length-1) {
+            floodHelper(flag, image, i, j+1, newColor, oldColor);
+        }
+    }
+}
