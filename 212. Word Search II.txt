@@ -1,0 +1,57 @@
+class Solution {
+    List<String> res = new ArrayList();
+    class TrieNode{
+        TrieNode[] children = new TrieNode[26];
+        String word = "";
+    }
+    public List<String> findWords(char[][] board, String[] words) {
+        HashSet<String> set = new HashSet();
+        TrieNode dic = new TrieNode();
+        for(String w : words) {
+            setDictionary(dic, w, 0);
+        }
+        for(int i = 0; i < board.length; i++) {
+            for(int j = 0; j < board[0].length; j++) {
+                findWord(board, dic, i, j);
+            }
+        }
+        return res;
+    }
+    public void setDictionary(TrieNode dic, String w, int index) {
+        if(index == w.length()) {
+            dic.word = w;
+            return;
+        }
+        char c = w.charAt(index);
+        if(dic.children[c - 'a'] == null) {
+            dic.children[c - 'a'] = new TrieNode();
+        }
+        dic = dic.children[c - 'a'];
+        setDictionary(dic, w, index+1);
+    }
+    public void findWord(char[][] board, TrieNode dic, int i, int j) {
+        if(board[i][j] == '.') return;
+        char temp = board[i][j];
+        if(dic.children[temp - 'a'] == null) return;
+        dic = dic.children[temp - 'a'];
+        if(!dic.word.equals("")) {
+            res.add(new String(dic.word));
+            dic.word = "";
+        }
+        board[i][j] = '.';
+        if(i > 0) {
+            findWord(board, dic, i-1, j);
+        }
+        if(j > 0) {
+            findWord(board, dic, i, j-1);
+        }
+        if(i < board.length-1) {
+            findWord(board, dic, i+1, j);
+        }
+        if(j < board[0].length-1) {
+            findWord(board, dic, i, j+1);
+        }
+        board[i][j] = temp;
+        return;
+    }
+}
