@@ -1,0 +1,32 @@
+class Solution {
+    public int[] topKFrequent(int[] nums, int k) {
+        Arrays.sort(nums);
+        PriorityQueue<int[]> pq = new PriorityQueue<int[]>(new Comparator<int[]>(){
+            public int compare(int[] o1, int[] o2) {
+                return o2[1] - o1[1];
+            }
+        });
+        // if(nums.length == 1) return nums[0];
+        int frequency = 1;
+        for(int i = 1; i < nums.length; i++) {
+            if(nums[i] == nums[i-1]) {
+                frequency ++;
+            } else {
+                int[] temp = new int[2];
+                temp[0] = nums[i-1];
+                temp[1] = frequency;
+                pq.add(temp);
+                frequency = 1;
+            }
+        }
+        int[] temp = new int[2];
+        temp[0] = nums[nums.length-1];
+        temp[1] = frequency;
+        pq.add(temp);
+        int[] res = new int[k];
+        for(int i = 0; i < k; i++) {
+            res[i] = pq.poll()[0];
+        }
+        return res;
+    }
+}
