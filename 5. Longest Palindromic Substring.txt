@@ -1,0 +1,26 @@
+class Solution {
+    public String longestPalindrome(String s) {
+        if(s.length() <= 1) return s;
+        char[] c = s.toCharArray();
+        boolean[][] dp = new boolean[s.length()][s.length()];
+        for(int i = 0; i < s.length(); i++) {
+            dp[i][i] = true;
+        }
+        for(int i = 1; i < s.length(); i++) {
+            for(int j = 0; j < i; j++) {
+                if(j == i-1 && c[i] == c[j]) {
+                    dp[i][j] = true;
+                } else if(dp[i-1][j+1] && c[i] == c[j] ) {
+                    dp[i][j] = true;
+                }
+            }
+        }
+        String res = s.substring(0,1);
+        for(int i = 1; i < s.length(); i++) {
+            for(int j = 0; j < i; j++) {
+                if(dp[i][j] && i-j+1 > res.length()) res = s.substring(j, i+1);
+            }
+        }
+        return res;
+    }
+}
