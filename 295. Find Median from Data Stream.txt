@@ -1,0 +1,52 @@
+class MedianFinder {
+    ArrayList<Integer> arr;
+    /** initialize your data structure here. */
+    public MedianFinder() {
+        arr = new ArrayList();
+    }
+    
+    public void addNum(int num) {
+        if(arr.size() == 0) {
+            arr.add(num);
+            return;
+        }
+        int left = 0, right = arr.size()-1;
+        if(num <= arr.get(left)) {
+            arr.add(0, num);
+        } else if (num >= arr.get(right)) {
+            arr.add(num);
+        } else {
+            
+            while(left < right) {
+                int mid = (left + right+1) / 2;
+                if(mid > 0 && arr.get(mid) >= num && arr.get(mid - 1) <= num) {
+                    arr.add(mid, num);
+                    return;
+                } else if(mid < arr.size() - 1 && arr.get(mid) <= num && arr.get(mid + 1) >= num) {
+                    arr.add(mid+1, num);
+                    return;
+                } else if (arr.get(mid) < num) {
+                    left = mid + 1;
+                } else {
+                    right = mid - 1;
+                }
+            }
+        }
+    }
+    
+    public double findMedian() {
+        ArrayList<Integer> temp = arr;
+        if(arr.size() %2 == 0) {
+            return (double)(arr.get(arr.size()/2) + arr.get(arr.size()/2 -1))/2;
+        } else {
+            return (double)arr.get(arr.size()/2);
+        }
+    }
+}
+
+/**
+ * Your MedianFinder object will be instantiated and called as such:
+ * MedianFinder obj = new MedianFinder();
+ * obj.addNum(num);
+ * double param_2 = obj.findMedian();
+ */
