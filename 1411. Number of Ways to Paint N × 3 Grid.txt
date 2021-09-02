@@ -1,0 +1,13 @@
+class Solution {
+    public int numOfWays(int n) {
+        int[] ss = new int[n];
+        int[] ds = new int[n];
+        ss[0] = 6;
+        ds[0] = 6;
+        for(int i = 1; i < n; i++) {
+            ss[i] = ((ss[i-1] * 2 % 1000000007 + ss[i-1])% 1000000007 + 2 * ds[i-1] % 1000000007) % 1000000007;
+            ds[i] = (ss[i-1] * 2 % 1000000007 + ds[i-1] * 2 % 1000000007) % 1000000007;
+        }
+        return ((ds[n-1]+ ss[n-1])% 1000000007);
+    }
+}
