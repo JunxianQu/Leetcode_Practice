@@ -1,0 +1,19 @@
+class Solution {
+    public int removeDuplicates(int[] nums) {
+        int pointer = 0;
+        int twice = 0;
+        for(int i = 1; i < nums.length; i++) {
+            if(nums[i] == nums[pointer]) twice = 1;
+            if(nums[i] != nums[pointer]) {
+                nums[pointer+twice] = nums[pointer];
+                nums[pointer+1 + twice] = nums[i];
+                pointer += twice + 1;
+                twice = 0;
+            }
+        }
+        if(twice == 1) {
+            nums[pointer+1] = nums[nums.length-1];
+        }
+        return pointer+twice+1;
+    }
+}
