@@ -1,0 +1,76 @@
+class AutocompleteSystem {
+    class Auto{
+        String s;
+        int time;
+        public Auto(String s, int time) {
+            this.s = s;
+            this.time = time;
+        }
+    }
+    String s = "";
+    HashMap<String, ArrayList<String>> map = new HashMap();
+    HashMap<String, Integer> freq = new HashMap();
+    public AutocompleteSystem(String[] sentences, int[] times) {
+        putToMap(sentences, times);
+        
+    }
+    public void putToMap(String[] sentences, int[] times) {
+        for(int i = 0; i < times.length; i ++) {
+            String st = sentences[i];
+            int time = times[i];
+            freq.put(st, time);
+            for(int j = 1; j <= st.length(); j++) {
+                if(map.containsKey(st.substring(0,j))) {
+                    ArrayList<String> arr = map.get(st.substring(0, j));
+                    arr.add(st);
+                } else {
+                    ArrayList<String> arr = new ArrayList();
+                    arr.add(st);
+                    map.put(st.substring(0, j), arr);
+                }
+            }
+        }
+    }
+    public List<String> input(char c) {
+        List<String> res = new ArrayList();
+        if(c == '#') {
+            if(freq.containsKey(s)) {
+                freq.put(s, freq.get(s) + 1);
+            } else {
+                freq.put(s, 1);
+            }
+            String[] ss = new String[1];
+            ss[0] = s;
+            putToMap(ss, new int[]{freq.get(s)});
+            s = "";
+            return res;
+        }
+        s = s + c;
+        PriorityQueue<Auto> pq = new PriorityQueue<Auto>(new Comparator<Auto>(){
+            public int compare(Auto o1, Auto o2) {
+                if(o1.time == o2.time) return o1.s.compareTo(o2.s);
+                return o2.time - o1.time;
+            }
+        });
+        if(map.containsKey(s)) {
+            ArrayList<String> arr = map.get(s);
+            HashSet<String> set = new HashSet();
+            for(String sa : arr) {
+                if(set.contains(sa)) continue;
+                Auto a = new Auto(sa, freq.get(sa));
+                pq.add(a);
+                set.add(sa);
+            }
+            for(int i = 0; i < 3 && !pq.isEmpty(); i++) {
+                res.add(pq.poll().s);
+            }
+        }
+        return res;
+    }
+}
+
+/**
+ * Your AutocompleteSystem object will be instantiated and called as such:
+ * AutocompleteSystem obj = new AutocompleteSystem(sentences, times);
+ * List<String> param_1 = obj.input(c);
+ */
