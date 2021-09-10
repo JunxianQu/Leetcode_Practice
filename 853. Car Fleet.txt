@@ -1,0 +1,31 @@
+class Solution {
+    class Bump{
+        double time;
+        int pos;
+    }
+    public int carFleet(int target, int[] position, int[] speed) {
+        PriorityQueue<Bump> pq = new PriorityQueue(new Comparator<Bump>(){
+            public int compare(Bump o1, Bump o2) {
+                return o2.pos - o1.pos;
+            }
+        });
+        for(int i = 0; i < speed.length; i++) {
+            Bump bp = new Bump();
+            bp.pos = position[i];
+            bp.time = (double)(target - bp.pos)/speed[i];
+            pq.add(bp);
+        }
+        int res = 1;
+        Bump temp = pq.poll();
+        while(!pq.isEmpty()) {
+            Bump next = pq.poll();
+            if(next.time <= temp.time) {
+                res--;
+            } else{
+                temp = next;
+            }
+            res++;
+        }
+        return res;
+    }
+}
