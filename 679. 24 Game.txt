@@ -1,0 +1,36 @@
+class Solution {
+    public boolean judgePoint24(int[] cards) {
+        double[] card = new double[cards.length];
+        for(int i = 0; i < cards.length; i++) {
+            card[i] = (double)cards[i];
+        }
+        return judge24(card);
+        
+    }
+    public boolean judge24(double[] cards) {
+        if(cards.length == 1) return Math.abs(cards[0] - 24) < 0.000000001;
+        for(int i = 0; i < cards.length; i++) {
+            double[] nextCards = new double[cards.length-1];
+            
+            for(int j = 0; j < cards.length; j++) {
+                int point = 0;
+                if(j == i) continue;
+                for(int k = 0; k < cards.length; k++) {
+                    if(k== j || k == i) continue;
+                    nextCards[point] = cards[k];
+                    point++;
+                }
+                nextCards[point] = cards[i]+cards[j];
+                if(judge24(nextCards)) return true;
+                nextCards[point] = cards[i]-cards[j];
+                if(judge24(nextCards)) return true;
+                nextCards[point] = cards[i]*cards[j];
+                if(judge24(nextCards)) return true;
+                if(cards[j] != 0)nextCards[point] = cards[i]/cards[j];
+                if(judge24(nextCards)) return true;
+            }
+        }
+        return false;
+        
+    }
+}
