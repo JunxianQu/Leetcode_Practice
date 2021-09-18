@@ -1,0 +1,30 @@
+class Solution {
+    // Hash by Path Signature   
+    public int numDistinctIslands(int[][] grid) {
+        Set<String> seen = new HashSet();
+        int ans = 0;
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[0].length; j++) {
+                if (grid[i][j] == 1) {
+                    String path = dfs(grid, i, j, "");
+                    if (!seen.contains(path)) {
+                        seen.add(path);
+                        ans += 1;
+                    }
+                }
+            }
+        }
+        
+        return ans;
+    }
+    
+    private String dfs(int[][] grid, int row, int col, String path) {
+        if (row < 0 || row >= grid.length || col < 0 || col >= grid[0].length || grid[row][col] == 0) {
+            return "#";
+        }
+        
+        grid[row][col] = 0;
+        return path + dfs(grid, row + 1, col, "D") + dfs(grid, row - 1, col, "U")
+            + dfs(grid, row, col + 1, "R") + dfs(grid, row, col - 1, "L");
+    }
+}
