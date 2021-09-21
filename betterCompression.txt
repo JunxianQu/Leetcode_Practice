@@ -1,0 +1,22 @@
+public string betterCompression(String s) {
+    char[] c = s.toCharArray();
+    int[] sum = new int[26];
+    int count = 0;
+    int cha = 0;
+    for(int i = 0; i < c.length; i++) {
+        if(c[i] >= 97 && c[i] <= 122) {
+            sum[c[i] - 97] += count;
+            cha = c[i] - 97;
+            count = 0;
+        } else {
+            count = count*10 + c[i] - '0';
+        }
+    }
+    String res = "";
+    for(int i = 0; i < 26; i++) {
+        if(sum[i] != 0) {
+            res += Character.toString(i+'a') + String.valueOf(sum[i]);
+        }
+    }
+    return res;
+}
