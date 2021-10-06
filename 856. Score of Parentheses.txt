@@ -1,0 +1,26 @@
+class Solution {
+    public int scoreOfParentheses(String s) {
+        Stack<String> stack = new Stack();
+        for(int i = 0; i < s.length(); i++) {
+            String bracket = s.substring(i,i+1);
+            if(bracket.equals("(")) stack.push(bracket);
+            if(bracket.equals(")")) {
+                int sum = 0;
+                String temp = stack.pop();
+                if(temp.equals("(")) {
+                    sum = 1;
+                } else {
+                    while(!temp.equals("(")) {
+                        sum += Integer.parseInt(temp);
+                        temp = stack.pop();
+                    }
+                    sum *= 2;
+                } 
+                stack.push(String.valueOf(sum));
+            }
+        }
+        int res = 0;
+        while(!stack.isEmpty()) res += Integer.parseInt(stack.pop());
+        return res;
+    }
+}
