@@ -1,0 +1,44 @@
+class Solution {
+    List<List<String>> res;
+    class Node{
+        Node[] children = new Node[26];
+        String word = "";
+    }
+    Node root;
+    public void initialNode(String product) {
+        Node curr = root;
+        for(char c : product.toCharArray()) {
+            if(curr.children[c-'a'] == null) curr.children[c-'a'] = new Node();
+            curr = curr.children[c-'a'];
+        }
+        curr.word = product;
+        
+    }
+    public void findProduct(String searchPrefix, ArrayList<String> arr) {
+        Node curr = root;
+        for(char c : searchPrefix.toCharArray()) {
+            if(curr.children[c - 'a'] == null) return;
+            curr = curr.children[c - 'a'];
+        }
+        findProductInOrder(curr, arr);
+    }
+    public void findProductInOrder(Node curr, ArrayList<String> arr) {
+        if(arr.size() == 3) return;
+        if(curr.word.length() != 0) arr.add(curr.word);
+        
+        for(int i = 0; i < 26; i++) {
+            if(curr.children[i] != null) findProductInOrder(curr.children[i], arr);
+        }
+    }
+    public List<List<String>> suggestedProducts(String[] products, String searchWord) {
+        res = new ArrayList();
+        root = new Node();
+        for(String product : products) initialNode(product);
+        for(int i = 0; i < searchWord.length(); i++) {
+            ArrayList<String> arr = new ArrayList();
+            findProduct(searchWord.substring(0,i+1), arr);
+            res.add(new ArrayList<String>(arr));
+        }
+        return res;
+    }
+}
