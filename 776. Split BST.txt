@@ -1,0 +1,33 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public TreeNode[] splitBST(TreeNode root, int V) {
+        if(root==null) return new TreeNode[]{null, null};
+        TreeNode[] splitted;
+        if(root.val<= V) {
+            splitted = splitBST(root.right, V);
+            root.right = splitted[0];
+            splitted[0] = root;
+        } else {
+            splitted = splitBST(root.left, V);
+            root.left = splitted[1];
+            splitted[1] = root;
+        }
+        
+        return splitted;
+    }
+    
+}
