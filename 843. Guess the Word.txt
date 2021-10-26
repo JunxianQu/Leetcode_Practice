@@ -1,0 +1,50 @@
+/**
+ * // This is the Master's API interface.
+ * // You should not implement it, or speculate about its implementation
+ * interface Master {
+ *     public int guess(String word) {}
+ * }
+ */
+class Solution {
+    class Node{
+        int matchNum;
+        String word;
+        public Node(int matchNum, String word) {
+            this.matchNum = matchNum;
+            this.word = word;
+        }
+    }
+    public void findSecretWord(String[] wordlist, Master master) {
+        int size = wordlist.length;
+        int guess = 0;
+        List<String> wordList = new ArrayList();
+        for(String word : wordlist) {
+            wordList.add(word);
+        }
+        Collections.shuffle(wordList);
+        List<Node> guessResults = new ArrayList();
+        while(guess < 10) {
+            for(String word : wordList) {
+                if(match(word, guessResults)) {
+                    int matchNum = master.guess(word);
+                    if(matchNum == 6) return;
+                    Node guessResult = new Node(matchNum, word);
+                    guessResults.add(guessResult);
+                }
+            }
+            guess++;
+        }
+        
+    }
+    public boolean match(String word, List<Node> guessResults) {
+        for(Node guessResult : guessResults) {
+            String temp = guessResult.word;
+            int count = 0;
+            for(int i = 0; i < 6; i++) {
+                if(temp.charAt(i) == word.charAt(i)) count ++;
+            }
+            if(count != guessResult.matchNum) return false;
+        }
+        return true;
+    }
+}
