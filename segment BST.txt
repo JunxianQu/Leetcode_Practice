@@ -1,0 +1,51 @@
+package interview;
+import java.util.*;
+
+import javax.swing.tree.TreeNode;
+public class BST {
+	class StrNode{
+		StrNode left = new StrNode();
+		StrNode right = new StrNode();
+		int size = 0;
+		String val = "";
+		public StrNode(int size) {
+			this.size = size;
+		}
+	}
+	public static void main(String[] args) {}
+	public static StrNode findIndex(TreeNode root, int index, String str) {
+		StrNode strTree = buildTree(root, index, str);
+		StrNode findIndex = searchTree(strTree, index, str);
+	}
+	public static StrNode buildTree(TreeNode root, int index, String str) {
+		StrNode strTree = new StrNode();
+		strTree.size = root.val;
+		Queue<TreeNode> queTree = new LinkedList();
+		Queue<StrNode> queStr = new LinkedList();
+		queTree.offer(root);
+		queStr.offer(strTree);
+		while(!queTree.isEmpty()) {
+			int size = queTree.size();
+			for(int i = 0; i < size; i++) {
+				TreeNode tempTree = queTree.poll();
+				StrNode tempStr = queStr.poll();
+				if(tempTree.left != null) {
+					tempStr.left = new StrNode(tempTree.left.val);
+					queTree.offer(tempTree.left);
+					queStr.offer(tempStr.left);
+				}
+				if(tempTree.right != null) {
+					tempStr.left = new StrNode(tempTree.right.val);
+					queTree.offer(tempTree.right);
+					queStr.offer(tempStr.right);
+				}
+				if(tempTree.left == null && tempTree.right == null) {
+					tempStr.val = str.substring(0, tempStr.size);
+					str = str.substring(tempStr.size, str.length());
+				}
+			}
+		}
+		return strTree;
+		
+	}
+}
