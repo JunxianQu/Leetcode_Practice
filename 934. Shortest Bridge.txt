@@ -1,0 +1,53 @@
+class Solution {
+    Queue<int[]> queNode = new LinkedList();
+    public int shortestBridge(int[][] grid) {
+        for(int i = 0; i < grid.length; i++) {
+            for(int j = 0; j < grid[0].length; j++) {
+                if(grid[i][j] == 1) {
+                    findBoundary(grid, i, j);
+                    i = grid.length;
+                    break;
+                }
+            }
+        }
+        while(!queNode.isEmpty()) {
+            int size = queNode.size();
+            for(int i = 0; i < size; i++) {
+                int[] temp = queNode.poll();
+                if(helpBFS(temp, grid)) return grid[temp[0]][temp[1]]-2;
+            }
+        }
+        return -1;
+    }
+    public boolean findBoundary(int[][] grid, int i, int j) {
+        if(i < 0 || i >= grid.length || j < 0 || j >= grid[0].length) return false;
+        if(grid[i][j] == 2) return false;
+        if(grid[i][j] == 0) return true;
+        boolean res = false; 
+        grid[i][j] = 2;
+        res |= findBoundary(grid, i+1, j);
+        res |= findBoundary(grid, i-1, j);
+        res |= findBoundary(grid, i, j+1);
+        res |= findBoundary(grid, i, j-1);
+        if(res) queNode.offer(new int[]{i,j});
+        return false;
+        
+    }
+    public boolean helpBFS(int[] temp, int[][] grid) {
+        int i = temp[0];
+        int j = temp[1];
+        boolean res = false; 
+        res |= searchNeighbor(grid, i+1, j, grid[i][j]);
+        res |= searchNeighbor(grid, i-1, j, grid[i][j]);
+        res |= searchNeighbor(grid, i, j+1, grid[i][j]);
+        res |= searchNeighbor(grid, i, j-1, grid[i][j]);
+        return res;
+    }
+    public boolean searchNeighbor(int[][] grid, int i, int j, int val) {
+        if(i < 0 || i >= grid.length || j < 0 || j >= grid[0].length || grid[i][j] > 1) return false;
+        if(grid[i][j] == 1) return true;
+        grid[i][j] = val+1;
+        queNode.offer(new int[]{i, j});
+        return false;
+    }
+}
