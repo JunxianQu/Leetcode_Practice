@@ -1,0 +1,57 @@
+class Solution {
+    public int shortestPathBinaryMatrix(int[][] grid) {
+        int row = grid.length;
+        int col = grid[0].length;
+        if(grid[0][0] == 1 || grid[row-1][col-1] == 1) return -1;
+        for(int i = 0; i < row; i++) {
+            for(int j = 0; j < col; j++) {
+                if(grid[i][j] == 1) grid[i][j] = 10000;
+            }
+        }
+        grid[0][0] = 1;
+        Queue<int[]> que = new LinkedList();
+        que.offer(new int[]{0,0});
+        while(!que.isEmpty()) {
+            int size = que.size();
+            for(int m = 0; m < size; m++) {
+                int[] temp = que.poll();
+                int i = temp[0];
+                int j = temp[1];
+                if(i > 0 && grid[i-1][j] == 0) {
+                    grid[i-1][j] = grid[i][j]+1;
+                    que.offer(new int[]{i-1,j});
+                }
+                if(j > 0 && grid[i][j-1] == 0) {
+                    grid[i][j-1] = grid[i][j]+1;
+                    que.offer(new int[]{i,j-1});
+                }
+                if(i < row-1 && grid[i+1][j] == 0) {
+                    grid[i+1][j] = grid[i][j]+1;
+                    que.offer(new int[]{i+1,j});
+                }
+                if(j < col-1 && grid[i][j+1] == 0) {
+                    grid[i][j+1] = grid[i][j]+1;
+                    que.offer(new int[]{i,j+1});
+                }
+                if(i > 0 && j > 0 && grid[i-1][j-1] == 0) {
+                    grid[i-1][j-1] = grid[i][j]+1;
+                    que.offer(new int[]{i-1,j-1});
+                }
+                if(i < row-1 && j > 0 && grid[i+1][j-1] == 0) {
+                    grid[i+1][j-1] = grid[i][j]+1;
+                    que.offer(new int[]{i+1,j-1});
+                }
+                if(i > 0 && j < col-1 && grid[i-1][j+1] == 0) {
+                    grid[i-1][j+1] = grid[i][j]+1;
+                    que.offer(new int[]{i-1,j+1});
+                }
+                if(i < row-1 && j < col-1 && grid[i+1][j+1] == 0) {
+                    grid[i+1][j+1] = grid[i][j]+1;
+                    que.offer(new int[]{i+1,j+1});
+                }
+            }
+        }
+        return grid[row-1][col-1] == 0 ? -1 : grid[row-1][col-1];
+        
+    }
+}
