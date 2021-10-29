@@ -1,0 +1,41 @@
+class Solution {
+    public int getFood(char[][] grid) {
+        int row = grid.length;
+        int col = grid[0].length;
+        Queue<int[]> queFood = new LinkedList();
+        for(int i = 0; i < row; i++) {
+            for(int j = 0; j < col; j++) {
+                if(grid[i][j] == '*') {
+                    queFood.offer(new int[]{i, j});
+                    break;
+                }
+            }
+        }
+        int result = 1;
+        while(!queFood.isEmpty()) {
+            int size = queFood.size();
+            for(int m = 0; m < size; m++) {
+                int[] temp = queFood.poll();
+                int i = temp[0];
+                int j = temp[1];
+                boolean flag = false;
+                flag |= checkFood(grid, i-1, j, queFood);
+                flag |= checkFood(grid, i+1, j, queFood);
+                flag |= checkFood(grid, i, j-1, queFood);
+                flag |= checkFood(grid, i, j+1, queFood);
+                if(flag) return result;
+            }
+            result ++;
+        }
+        return -1;
+    }
+    
+    public boolean checkFood(char[][] grid, int i, int j, Queue<int[]> queFood) {
+        if(i < 0 || i >= grid.length || j < 0 || j >= grid[0].length) return false;
+        if(grid[i][j] == '#') return true;
+        if(grid[i][j] != 'O') return false;
+        grid[i][j] = '@';
+        queFood.offer(new int[]{i,j});
+        return false;
+    }
+}

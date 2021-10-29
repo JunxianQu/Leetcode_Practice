@@ -1,0 +1,38 @@
+class Solution {
+    public int shortestPath(int[][] grid, int k) {
+        int[][] directions = {{-1,0},{1,0},{0,1},{0,-1}};
+        int row = grid.length;
+        int col = grid[0].length;
+        int[][][] visited = new int[row][col][k+1];
+        Arrays.fill(visited[row-1][col-1], Integer.MAX_VALUE);
+        Queue<int[]> queNode = new LinkedList();
+        visited[0][0][0] = 0;
+        queNode.offer(new int[]{0,0,0});
+        //BFS
+        int count = 1;
+        while(!queNode.isEmpty()) {
+            int size = queNode.size();
+            while(size > 0) {
+                int[] tmp = queNode.poll();
+                for(int[] direction : directions) {
+                    int i = tmp[0] + direction[0];
+                    int j = tmp[1] + direction[1];
+                    if(i < 0 || i >= row || j < 0 || j >= col) continue;
+                    int key = tmp[2] + grid[i][j];
+                    if( key > k) continue;
+                    if(visited[i][j][key] == 0 || visited[i][j][key] == Integer.MAX_VALUE) {
+                        queNode.offer(new int[]{i,j,key});
+                        visited[i][j][key] = count;
+                    }
+                    
+                }
+                size--;
+            }
+            count++;
+        }
+        int result = Integer.MAX_VALUE;
+        for(int key = 0; key <= k; key++) result = Math.min(result, visited[row-1][col-1][key]);
+        return result == Integer.MAX_VALUE ? -1 : result;
+    }
+
+}
