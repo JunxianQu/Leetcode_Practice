@@ -1,0 +1,36 @@
+class Solution {
+    public int numMatchingSubseq(String s, String[] words) {
+        int length = s.length();
+        HashMap<Character, List<Integer>> map = new HashMap();
+        for(int i = 0; i < length; i++) {
+            if(map.containsKey(s.charAt(i))) {
+                map.get(s.charAt(i)).add(i);
+            } else {
+                List<Integer> tmp = new ArrayList();
+                tmp.add(i);
+                map.put(s.charAt(i), tmp);
+            }
+        }
+        
+        int res = 0;
+        for(String word : words) {
+            int lastIndex = -1;
+            int count = 0;
+            for(int m = 0; m < word.length(); m++) {
+                if(!map.containsKey(word.charAt(m))) break;
+                List<Integer> wordIndexes = map.get(word.charAt(m));
+                for(int i = 0; i < wordIndexes.size(); i++) {
+                    if(wordIndexes.get(i) <= lastIndex) {
+                        continue;
+                    } else {
+                        lastIndex = wordIndexes.get(i);
+                        count++;
+                        break;
+                    }
+                }
+            }
+            if(count == word.length()) res++;
+        }
+        return res;
+    }
+}
