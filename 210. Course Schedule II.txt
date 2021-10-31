@@ -1,0 +1,45 @@
+class Solution {
+    public int[] findOrder(int numCourses, int[][] prerequisites) {
+        int length = numCourses;
+        int[][] degrees = new int[length][length];
+        //O(v), set the degree matrix
+        for(int[] prerequisite : prerequisites) {
+            if(degrees[prerequisite[0]][prerequisite[1]] != 0) return new int[]{};
+            degrees[prerequisite[0]][prerequisite[1]] --;
+            degrees[prerequisite[1]][prerequisite[0]] ++;
+        }
+        
+        int[] res = new int[length];
+        Arrays.fill(res, -1);
+        Queue<Integer> courseQue = new LinkedList();
+        //O(n^2) finding root courses
+        for(int i = 0; i < length; i++) {
+            int indegree = 0;
+            for(int degree : degrees[i]) {
+                if(degree == -1) indegree++;
+            }
+            if(indegree == 0) courseQue.offer(i);
+        }
+        int index = 0;
+        //BFS O(n), count indegree O(n) ===>total O(n^2)
+        while(!courseQue.isEmpty()) {
+            int size = courseQue.size();
+            while(size-- > 0) {
+                int tmp = courseQue.poll();
+                res[index++] = tmp;
+                for(int d = 0; d < length; d++) {
+                    if(degrees[tmp][d] == 1) {
+                        degrees[d][tmp] = 0;
+                        int indegree = 0;
+                        for(int degree : degrees[d]) {
+                            if(degree == -1) indegree++;
+                        }
+                        if(indegree == 0) courseQue.offer(d);
+                    }
+                }
+            }
+        }
+        if(res[length-1] == -1) return new int[]{};
+        return res;
+    }
+}
