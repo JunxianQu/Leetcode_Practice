@@ -1,0 +1,38 @@
+/*
+// Definition for Employee.
+class Employee {
+    public int id;
+    public int importance;
+    public List<Integer> subordinates;
+};
+*/
+
+
+//employees = [[1,5,[2,3]],[2,3,[]],[3,3,[]]], id = 1
+    
+class Solution {
+    public int getImportance(List<Employee> employees, int id) {
+        Map<Integer, Employee> mapID = new HashMap();
+        for(int i = 0; i < employees.size(); i++) {
+            mapID.put(employees.get(i).id, employees.get(i));
+        }
+        Queue<Employee> queEmployees = new LinkedList();
+        Employee father = mapID.get(id);
+        queEmployees.offer(father);
+        int res = father.importance;
+        while(!queEmployees.isEmpty()) {
+            int size = queEmployees.size();
+            while(size-- > 0) {
+                Employee tmp = queEmployees.poll();
+                List<Integer> subordinateIDs = tmp.subordinates;
+                for(int subordinateID : subordinateIDs) {
+                    Employee subordinate = mapID.get(subordinateID);
+                    if(subordinate.subordinates.size() != 0) queEmployees.offer(subordinate);
+                    res += subordinate.importance;
+                }
+            }
+        }
+        return res;
+    }
+    
+}
